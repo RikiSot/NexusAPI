@@ -409,3 +409,25 @@ class Clase_Nexus:
         filtered_hist.set_index(filtered_hist.timeStamp, inplace=True)
         del filtered_hist['timeStamp']
         return (filtered_hist)
+
+    #TODO: ADAPTAR LA NUEVA FUNCION, intentar poder pasar lista de filtros
+    def filter_tagview2(self, Datefrom, Dateto, columnas, uid_vista, filter_txt, resolucion=3, fuente=0):
+        # la funcion recibe como parametros la fecha ini, fecha fin, un df con los uid y
+        # los nombres de las variables de la instalación y el filtro de texto aplicar
+        uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
+        n = len(list(uids))
+        labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
+        fecha_ini = Datefrom
+        fecha_fin = Dateto
+        # dataSource: [0 -->RAW, 1 -->STATS_PER_HOUR, 2 -->STATS_PER_DAY, 3 -->STATS_PER_MONTH, 4 -->TRANSIENT]
+        # resolution: de 0 a 10 [ RES_30_SEC, RES_1_MIN, RES_15_MIN, RES_1_HOUR, RES_1_DAY, RES_1_MONTH, RES_1_YEAR,
+        # RES_5_MIN, RES_200_MIL, RES_500_MIL, RES_1_SEC ]
+        nexusRequest = NexusRequest(uids, fecha_ini, fecha_fin, fuente, resolucion)
+        # print(nexusRequest.uids)
+        filtered_hist = self.callGetDataviewHistory(uid_vista, nexusRequest)
+        filtered_hist = json_normalize(filtered_hist)
+        # print(filtered_hist)
+        filtered_hist.timeStamp = pandas.to_datetime(filtered_hist.timeStamp, unit='s')
+        diccio = dict([(i, j) for i, j in zip(columnas.uid, columnas.name)])
+        filtered_hist['name'] = filtered_hist['uid'].map(diccio)
+        return (filtered_hist)
