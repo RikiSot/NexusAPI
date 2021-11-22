@@ -1,18 +1,20 @@
-from ..nexus_api import APINexus
+from nexus_api import APINexus
 import pandas as pd
 from pandas import json_normalize
 import datetime
+import unittest
 
-def test_get_historical_values():
-    API_Host = 'nexus-cdi-demo.globalomnium.com'
-    API_Port = 56000
-    NexusToken = '96f8a50b-6e26-4c0f-bd19-68d0ba187cda'
-    version = 'v1'
-    # New object pointing to HOST and Port selected with Nexus Token
-    NX = APINexus.Clase_Nexus(API_Host, API_Port, NexusToken, version)
+class TestHistoricalData(unittest.TestCase):
 
-    # Leer vistas de variables asociadas al token
-    try:
+    def test_get_historical_values(self):
+        API_Host = 'nexus-cdi-demo.globalomnium.com'
+        API_Port = 56000
+        NexusToken = '96f8a50b-6e26-4c0f-bd19-68d0ba187cda'
+        version = 'v1'
+        # New object pointing to HOST and Port selected with Nexus Token
+        NX = APINexus.Clase_Nexus(API_Host, API_Port, NexusToken, version)
+
+        # Leer vistas de variables asociadas al token
         tagviews = NX.callGetDocuments()
         tagviews = json_normalize(tagviews)
         # Busqueda del uid de la vista que contiene los niveles
@@ -34,9 +36,12 @@ def test_get_historical_values():
         columnas = df['columns']
         columnas = json_normalize(columnas)
         uids_vbles = list(columnas['uid'])  # String with variables UIDS
-        filtered_hist = NX.filter_tagview(date_from, date_to, columnas, uid_tagview, 'variable')
-        # %% codecell
-        print(filtered_hist)
-        assert 1
-    except:
-        print('Error, could not retrieve data')
+        try:
+            filtered_hist = NX.filter_tagview(date_from, date_to, columnas, uid_tagview, 'variable')
+            print(filtered_hist)
+            self.assertTrue
+        except:
+            print('Error, could not retrieve data')
+
+if __name__=='__main__':
+    unittest.main()

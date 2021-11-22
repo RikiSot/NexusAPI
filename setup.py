@@ -6,8 +6,8 @@ setup(
     version='0.1.0',
     description='NexusAPI',
     install_requires=['pandas'],
-    setup_requires = ['pytest-runner'],
-    tests_require = ['pytest'],
+    setup_requires = [],
+    tests_require = [],
     author='Nexus Integra',
     license='UNLICENSED: private Nexus Integra',
 )

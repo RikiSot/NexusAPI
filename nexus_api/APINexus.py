@@ -9,8 +9,8 @@ import pandas
 import requests
 import urllib3
 from pandas import json_normalize
-from NexusRequest import NexusRequest
-from NexusValue import NexusValue
+from nexus_api.NexusRequest import NexusRequest
+from nexus_api.NexusValue import NexusValue
 
 
 def WarningsAndJson(func):
