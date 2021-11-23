@@ -364,9 +364,13 @@ class Clase_Nexus:
     def filter_installation(self, Datefrom, Dateto, columnas, filter_txt, resolucion=3, fuente=0):
         # la funcion recibe como parametros la fecha ini, fecha fin, un df con los uid y
         # los nombres de las variables de la instalación y el filtro de texto aplicar
-        uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
-        n = len(list(uids))
-        labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
+        uids=[]
+        labels=[]
+        for filter in filter_txt:
+            uids_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].uid)
+            uids.extend(uids_loop)
+            labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
+            labels.extend(labels_loop)
         fecha_ini = Datefrom
         fecha_fin = Dateto
         # dataSource: [0 -->RAW, 1 -->STATS_PER_HOUR, 2 -->STATS_PER_DAY, 3 -->STATS_PER_MONTH, 4 -->TRANSIENT]
@@ -387,36 +391,14 @@ class Clase_Nexus:
 
     def filter_tagview(self, Datefrom, Dateto, columnas, uid_vista, filter_txt, resolucion=3, fuente=0):
         # la funcion recibe como parametros la fecha ini, fecha fin, un df con los uid y
-        # los nombres de las variables de la instalación y el filtro de texto aplicar
-        uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
-        n = len(list(uids))
-        labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
-        fecha_ini = Datefrom
-        fecha_fin = Dateto
-        # dataSource: [0 -->RAW, 1 -->STATS_PER_HOUR, 2 -->STATS_PER_DAY, 3 -->STATS_PER_MONTH, 4 -->TRANSIENT]
-        # resolution: de 0 a 10 [ RES_30_SEC, RES_1_MIN, RES_15_MIN, RES_1_HOUR, RES_1_DAY, RES_1_MONTH, RES_1_YEAR,
-        # RES_5_MIN, RES_200_MIL, RES_500_MIL, RES_1_SEC ]
-        nexusRequest = NexusRequest(uids, fecha_ini, fecha_fin, fuente, resolucion)
-        # print(nexusRequest.uids)
-        filtered_hist = self.callGetDataviewHistory(uid_vista, nexusRequest)
-        filtered_hist = json_normalize(filtered_hist)
-        # print(filtered_hist)
-        filtered_hist.timeStamp = pandas.to_datetime(filtered_hist.timeStamp, unit='s')
-        for item in uids:
-            name_uid = list(columnas[columnas['uid'] == item].name)[0]
-            filtered_hist['uid'] = filtered_hist['uid'].replace(item, name_uid)
-        filtered_hist = filtered_hist.rename({'uid': 'name'}, axis='index')
-        filtered_hist.set_index(filtered_hist.timeStamp, inplace=True)
-        del filtered_hist['timeStamp']
-        return (filtered_hist)
-
-    #TODO: ADAPTAR LA NUEVA FUNCION, intentar poder pasar lista de filtros
-    def filter_tagview2(self, Datefrom, Dateto, columnas, uid_vista, filter_txt, resolucion=3, fuente=0):
-        # la funcion recibe como parametros la fecha ini, fecha fin, un df con los uid y
-        # los nombres de las variables de la instalación y el filtro de texto aplicar
-        uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
-        n = len(list(uids))
-        labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
+        # los nombres de las variables de la instalación y el filtro de texto aplicar [pueden ser varios]
+        uids=[]
+        labels=[]
+        for filter in filter_txt:
+            uids_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].uid)
+            uids.extend(uids_loop)
+            labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
+            labels.extend(labels_loop)
         fecha_ini = Datefrom
         fecha_fin = Dateto
         # dataSource: [0 -->RAW, 1 -->STATS_PER_HOUR, 2 -->STATS_PER_DAY, 3 -->STATS_PER_MONTH, 4 -->TRANSIENT]
