@@ -37,7 +37,7 @@ class TestHistoricalData(unittest.TestCase):
         columnas = json_normalize(columnas)
         uids_vbles = list(columnas['uid'])  # String with variables UIDS
         try:
-            filtered_hist = NX.filter_tagview3(date_from, date_to, columnas, uid_tagview, ['variable','variable2'])
+            filtered_hist = NX.filter_tagview(date_from, date_to, columnas, uid_tagview, ['variable'])
             print(filtered_hist)
             self.assertTrue
         except:
