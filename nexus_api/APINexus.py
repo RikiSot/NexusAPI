@@ -3,7 +3,6 @@ APINexus
 Class definition
 """
 import json
-from datetime import datetime
 
 import pandas
 import requests
@@ -153,19 +152,16 @@ class Clase_Nexus:
             )
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
             url_completa = self.url_NX + "/api/Tags/realtime/insert"
-            timestamp = datetime.now()
-            #timestamp = time.mktime(timestamp.timetuple())
-            #nexusvalue = NexusValue(variable_uid, variable_value, timestamp)
-            #
             nexusvalue = NexusValue(variable_uid, variable_value)
             payload = (
                 "["
                 + json.dumps(
-                    nexusvalue, default=lambda o: o.__dict__, sort_keys=True, indent=2
+                    nexusvalue, default=lambda o: o.__dict__, sort_keys=False, indent=2
                 )
                 + "]"
             )
-            # payload= "[{\"uid\": \"" + variable_uid + "\",\"value\": " + str(variable_value) + ",\"timeStamp\": " + str(TimeSTAMP) + "}]"
+            #print(payload)
+            #payload= "[{\"uid\": \"" + variable_uid + "\",\"value\": " + str(variable_value) + ",\"timeStamp\": " + str(timestamp) + "}]"
 
             headers = {
                 "nexustoken": self.token,

@@ -39,6 +39,8 @@ class TestHistoricalData(unittest.TestCase):
         try:
             filtered_hist = NX.filter_tagview(date_from, date_to, columnas, uid_tagview, ['variable'])
             print(filtered_hist)
+            print('Prueba para escribir un 1 en la variable WTP_pumped_current_month: ')
+            print(NX.callPostValueRT('WTP_pumped_current_month', float(1)))
             self.assertTrue
         except:
             print('Error, could not retrieve data')
