@@ -98,9 +98,7 @@ class Clase_Nexus:
         """Devuelve valor historico de los tags especificados en la estructura NexusRequest"""
         body = json.dumps(nexusRequest, default=lambda o: o.__dict__, sort_keys=True, indent=2)
         url = self.url_NX + "/api/Tags/historic"
-
         return self.__postResponse(url,body)
-
 
 
     def callPostTagInsert(self, variable_name):
@@ -362,20 +360,37 @@ class Clase_Nexus:
         # los nombres de las variables de la instalación y el filtro de texto aplicar
         uids=[]
         labels=[]
-        for filter in filter_txt:
-            uids_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].uid)
-            uids.extend(uids_loop)
-            labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
-            labels.extend(labels_loop)
+        if isinstance(filter_txt,list):
+            for filter in filter_txt:
+                uids_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].uid)
+                uids.extend(uids_loop)
+                print(uids)
+                labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
+                labels.extend(labels_loop)
+            if not uids:
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la vista')
+                labels = list(columnas.name)
+                uids = list(columnas.uid)
+        else:
+            uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
+            labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
+            if not uids:
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la vista')
+                labels = list(columnas.name)
+                uids = list(columnas.uid)
         fecha_ini = Datefrom
         fecha_fin = Dateto
+        print(uids)
+        print(labels)
+        #uids= [uids[1],uids[2]]
         # dataSource: [0 -->RAW, 1 -->STATS_PER_HOUR, 2 -->STATS_PER_DAY, 3 -->STATS_PER_MONTH, 4 -->TRANSIENT]
         # resolution: de 0 a 10 [ RES_30_SEC, RES_1_MIN, RES_15_MIN, RES_1_HOUR, RES_1_DAY, RES_1_MONTH, RES_1_YEAR, RES_5_MIN, RES_200_MIL, RES_500_MIL, RES_1_SEC ]
         nexusRequest = NexusRequest(uids, fecha_ini, fecha_fin, fuente, resolucion)
-        # print(nexusRequest.uids)
+
         filtered_hist = self.callGetTagsHistory(nexusRequest)
+        print(filtered_hist)
         filtered_hist = json_normalize(filtered_hist)
-        # print(filtered_hist)
+        print(filtered_hist)
         filtered_hist.timeStamp = pandas.to_datetime(filtered_hist.timeStamp, unit='s')
         for item in uids:
             name_uid = list(columnas[columnas['uid'] == item].name)[0]
@@ -390,22 +405,37 @@ class Clase_Nexus:
         # los nombres de las variables de la instalación y el filtro de texto aplicar [pueden ser varios]
         uids=[]
         labels=[]
-        for filter in filter_txt:
-            uids_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].uid)
-            uids.extend(uids_loop)
-            labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
-            labels.extend(labels_loop)
+        if isinstance(filter_txt,list):
+            for filter in filter_txt:
+                uids_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].uid)
+                uids.extend(uids_loop)
+                labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
+                labels.extend(labels_loop)
+            if not uids:
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la instalacion')
+                labels = list(columnas.name)
+                uids = list(columnas.uid)
+        else:
+            uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
+            labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
+            if not uids:
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la instalacion')
+                labels = list(columnas.name)
+                uids = list(columnas.uid)
         fecha_ini = Datefrom
         fecha_fin = Dateto
         # dataSource: [0 -->RAW, 1 -->STATS_PER_HOUR, 2 -->STATS_PER_DAY, 3 -->STATS_PER_MONTH, 4 -->TRANSIENT]
         # resolution: de 0 a 10 [ RES_30_SEC, RES_1_MIN, RES_15_MIN, RES_1_HOUR, RES_1_DAY, RES_1_MONTH, RES_1_YEAR,
         # RES_5_MIN, RES_200_MIL, RES_500_MIL, RES_1_SEC ]
+
         nexusRequest = NexusRequest(uids, fecha_ini, fecha_fin, fuente, resolucion)
-        # print(nexusRequest.uids)
         filtered_hist = self.callGetDataviewHistory(uid_vista, nexusRequest)
         filtered_hist = json_normalize(filtered_hist)
-        # print(filtered_hist)
+
         filtered_hist.timeStamp = pandas.to_datetime(filtered_hist.timeStamp, unit='s')
         diccio = dict([(i, j) for i, j in zip(columnas.uid, columnas.name)])
         filtered_hist['name'] = filtered_hist['uid'].map(diccio)
         return (filtered_hist)
+
+
+
