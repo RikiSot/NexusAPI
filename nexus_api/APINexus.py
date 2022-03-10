@@ -23,7 +23,7 @@ def WarningsAndJson(func):
     return f
 
 
-class Clase_Nexus:
+class APINexus:
     def __init__(self, IP_Maquina="localhost", Puerto=56000, token="", version="v1"):
         """Metodo de inicialización de la clase. Aquí se define la IP y el puerto al que hemos de conectar así como el token"""
         print("Creada nueva instancia de tipo NEXUS API")
@@ -268,12 +268,12 @@ class Clase_Nexus:
         for j in vbles:
             if j not in variables_names:
                 NOK=1
-                print('la variable ' + str(j) + 'no esta creada')
+                print('la variable ' + str(j) + 'no esta creada ')
 
 
 
         if NOK==0:
-            df2 = df_value_timestamp
+            df2 = df_value_timestamp.copy()
             df2['uid']=df2['name'].map(diccio)
 
             df2.drop(columns=["name"], inplace=True)
@@ -356,8 +356,10 @@ class Clase_Nexus:
         return dataReceived
 
     def filter_installation(self, Datefrom, Dateto, columnas, filter_txt, resolucion=3, fuente=0):
-        # la funcion recibe como parametros la fecha ini, fecha fin, un df con los uid y
-        # los nombres de las variables de la instalación y el filtro de texto aplicar
+        '''
+        la funcion recibe como parametros la fecha ini, fecha fin, un df con los uid y
+        los nombres de las variables de la instalación y el filtro de texto aplicar
+        '''
         uids=[]
         labels=[]
         if isinstance(filter_txt,list):
@@ -368,14 +370,14 @@ class Clase_Nexus:
                 labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
                 labels.extend(labels_loop)
             if not uids:
-                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la vista')
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la instalación')
                 labels = list(columnas.name)
                 uids = list(columnas.uid)
         else:
             uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
             labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
             if not uids:
-                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la vista')
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la instalación')
                 labels = list(columnas.name)
                 uids = list(columnas.uid)
         fecha_ini = Datefrom
@@ -412,14 +414,14 @@ class Clase_Nexus:
                 labels_loop = list(columnas[columnas['name'].str.contains(filter, case=False)].name)
                 labels.extend(labels_loop)
             if not uids:
-                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la instalacion')
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la vista')
                 labels = list(columnas.name)
                 uids = list(columnas.uid)
         else:
             uids = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].uid)
             labels = list(columnas[columnas['name'].str.contains(filter_txt, case=False)].name)
             if not uids:
-                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la instalacion')
+                print('Los filtros proporcionados no encuentran ninguna variable. Se devolverá toda la vista')
                 labels = list(columnas.name)
                 uids = list(columnas.uid)
         fecha_ini = Datefrom
