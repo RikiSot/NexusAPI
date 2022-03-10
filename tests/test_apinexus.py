@@ -12,7 +12,7 @@ class TestHistoricalData(unittest.TestCase):
     def get_historical_values_tagview(self):
         API_Host = 'nexus-cdi-demo.globalomnium.com'
         API_Port = 56000
-        NexusToken = '96f8a50b-6e26-4c0f-bd19-68d0ba187cda'
+        NexusToken = 'xxxxxxx'
         version = 'v1'
         # New object pointing to HOST and Port selected with Nexus Token
         NX = APINexus.Clase_Nexus(API_Host, API_Port, NexusToken, version)
