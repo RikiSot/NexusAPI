@@ -11,7 +11,7 @@ class TestHistoricalData(unittest.TestCase):
     def test_get_historical_values_tagview(self):
         API_Host = 'nexus-cdi-demo.globalomnium.com'
         API_Port = 56000
-        NexusToken = '96f8a50b-6e26-4c0f-bd19-68d0ba187cda'
+        NexusToken = 'xxxxxxx'
         version = 'v1'
         # New object pointing to HOST and Port selected with Nexus Token
         NX = APINexus.APINexus(API_Host, API_Port, NexusToken, version)
@@ -52,7 +52,7 @@ class TestHistoricalData(unittest.TestCase):
         # Parametros Inyección instancia Nexus
         API_Host = 'nexus-pyland.uksouth.cloudapp.azure.com'
         API_Port = 56000
-        NexusToken = '1f0c1daa-1449-4ea4-9c22-37032e64c50f'
+        NexusToken = 'xxxxxxx'
         version = 'v1'
         # New object pointing to HOST and Port selected with Nexus Token
         NX = APINexus.APINexus(API_Host, API_Port, NexusToken, version)
