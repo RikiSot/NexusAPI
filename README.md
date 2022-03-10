@@ -1,4 +1,4 @@
-# NexusAPI
+# nexus_integra_api
 Este repositorio tiene como propósito reunir en una única libería todas las funciones necesarias para trabajar con la API de Nexus en Python.
 En lugar de importar los archivos a la carpeta del proyecto cada vez que se usan puede instalarse la librería en la PATH de Python 
 
@@ -6,9 +6,12 @@ En lugar de importar los archivos a la carpeta del proyecto cada vez que se usan
 
 ## Instalación
 
-Usa el package manager pip para instalar la librería. Por el momento, no está publicada en ningún repositorio online así que hay que instalar el archivo de forma manual especificando la ruta del archivo .whl. Si se abre la consola desde la carpeta del proyecto:
+Usa el package manager pip para instalar la librería. Puede instalarse de forma local o desde el repositorio de PyPi
 
-    > pip install dist/nexus_api-0.1.0-py3-none-any.whl
+```
+pip install nexus_integra_api
+```
+    pip install dist/nexus_api-0.1.0-py3-none-any.whl
 
 ## Uso
 Para importar todo el contenido de la librería, una vez instalada hay que realizar el siguiente import:
@@ -17,7 +20,7 @@ Para importar todo el contenido de la librería, una vez instalada hay que reali
 Si únicamente se desea la clase en la que residen las funciones que trabajan con la API:
 
     from nexus_api import APINexus
-Lo que otorga acceso a la clase ClaseNexus en la que residen todas las funciones necesarias.
+Lo que otorga acceso a la clase APINexus en la que residen todas las funciones necesarias.
 
 ### Ejemplo de uso
 Un ejemplo de uso para la famosa función GetFiltered que permite filtrar el histórico de variables entre un periodo dado:
@@ -27,13 +30,13 @@ En primer lugar se especifican los parámetros de conexión y se crea el objeto 
 from nexus_api import APINexus
 import pandas as pd
 import datetime
-```
 
-    API_Host = 'nexus-cdi-demo.globalomnium.com'  
-    API_Port = 56000 
-    NexusToken = '96f8a50b-6e26-4c0f-bd19-68d0ba187cda' 
-    version = 'v1'
-    NX = APINexus.APINexus(API_Host, API_Port, NexusToken, version)
+API_Host = 'nexus-cdi-demo.globalomnium.com'  
+API_Port = 56000 
+NexusToken = 'xxxxxxxxxxxxxxxxx' 
+version = 'v1'
+NX = APINexus.APINexus(API_Host, API_Port, NexusToken, version)
+```
 Después es necesario obtener el uid de la vista de variables que se quiere leer (también existe función para leer desde instalación)
 ```
 # Leer vistas de variables asociadas al token  
@@ -70,8 +73,8 @@ Cualquier función o sugerencia añadida es bien recibida.
 
 Sugerencias:
 
--   Falta documentar las funciones de la API
--   Sería conveniente contar con un gestor de paquetes interno para poder instalar el paquete desde un repositorio de Nexus
+- Falta documentar las funciones de la API
+- Traducir documentación
 
 ## Contacto
 [**Pau Juan**](mailto:pau.juan@nexusintegra.io)
