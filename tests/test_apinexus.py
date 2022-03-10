@@ -53,7 +53,7 @@ class TestHistoricalData(unittest.TestCase):
         # Parametros Inyección instancia Nexus
         API_Host = 'nexus-pyland.uksouth.cloudapp.azure.com'
         API_Port = 56000
-        NexusToken = '1f0c1daa-1449-4ea4-9c22-37032e64c50f'
+        NexusToken = 'xxxxxxx'
         version = 'v1'
         # New object pointing to HOST and Port selected with Nexus Token
         NX = APINexus.Clase_Nexus(API_Host, API_Port, NexusToken, version)
