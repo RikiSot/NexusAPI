@@ -24,7 +24,7 @@ Un ejemplo de uso para la famosa función GetFiltered que permite filtrar el his
 
 En primer lugar se especifican los parámetros de conexión y se crea el objeto Nexus, además de los imports necesarios
 ```
-import nexus_api
+from nexus_api import APINexus
 import pandas as pd
 import datetime
 ```
@@ -33,7 +33,7 @@ import datetime
     API_Port = 56000 
     NexusToken = '96f8a50b-6e26-4c0f-bd19-68d0ba187cda' 
     version = 'v1'
-    NX = APINexus.Clase_Nexus(API_Host, API_Port, NexusToken, version)
+    NX = APINexus.APINexus(API_Host, API_Port, NexusToken, version)
 Después es necesario obtener el uid de la vista de variables que se quiere leer (también existe función para leer desde instalación)
 ```
 # Leer vistas de variables asociadas al token  
@@ -74,16 +74,15 @@ Sugerencias:
 -   Sería conveniente contar con un gestor de paquetes interno para poder instalar el paquete desde un repositorio de Nexus
 
 ## Contacto
-**Pau Juan**
+[**Pau Juan**](mailto:pau.juan@nexusintegra.io)
 *Operaciones*
-pau.juan@nexusintegra.io
 
-**Laura Moreno**
+
+[**Laura Moreno**](mailto:laura.moreno@nexusintegra.io)
 *Operaciones*
-laura.moreno@nexusintegra.io
 
-**Ricardo Gómez**
-*Operaciones*  
-[ricardo.gomez.aldaravi@nexusintegra.io](mailto:ricardo.gomez.aldaravi@nexusintegra.io)  
+
+[**Ricardo Gómez**](mailto:ricardo.gomez.aldaravi@nexusintegra.io)
+*Operaciones*
 
 [Nexus Integra](https://nexusintegra.io/)

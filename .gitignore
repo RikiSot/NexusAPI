@@ -30,6 +30,8 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+token.txt
+pyproject.toml
 MANIFEST
 
 # PyInstaller
