@@ -7,7 +7,10 @@ En lugar de importar los archivos a la carpeta del proyecto cada vez que se usan
 * [Instalación](#chapter1)
 * [Uso](#chapter2)
 * [Ejemplos](#chapter3)
-* [Contrubuir](#chapter4)
+  * [GetFiltered](#chapter3.1)
+  * [Uso de alarmas](#chapter3.2)
+  * [Email Alerts](#chapter3.3)
+* [Contribuir](#chapter4)
 * [Change Log](#chapter5)
 * [Contacto](#chapter6)
 
@@ -29,6 +32,8 @@ Si únicamente se desea la clase en la que residen las funciones que trabajan co
 Lo que otorga acceso a la clase APINexus en la que residen todas las funciones necesarias.
 
 ## Ejemplo de uso <a class="anchor" id="chapter3"></a>
+
+### GetFiltered <a class="anchor" id="chapter3.1"></a>
 Un ejemplo de uso para la famosa función GetFiltered que permite filtrar el histórico de variables entre un periodo dado:
 
 En primer lugar se especifican los parámetros de conexión y se crea el objeto Nexus, además de los imports necesarios
@@ -73,6 +78,86 @@ Finalmente se obtiene el histórico llamando a la función:
 filtered_hist = NX.filter_tagview(date_from, date_to, columnas, uid_tagview, 'variable')
 ```
 
+### Uso de alarmas <a class="anchor" id="chapter3.2"></a>
+Desde la versión **0.4** del encapsulado pueden modificarse alarmas en la API. Para ello se debe obtener el uid de la alarma a modificar y luego llamar a la función:
+#### Obtener uids de alarmas del token
+```
+alarmas = NX.callGetAlarms()
+```
+
+#### Obtener información de alarma por uid
+```
+alarma = NX.callGetAlarmByuid(uid)
+```
+
+#### Obtener uids de alarmas por nombres. Puede usarse una lista de nombres o un string con un nombre
+```
+uids_alarmas = NX.get_alarms_uids_by_names([names])
+```
+#### Obtener uids de alarmas por grupos de alarmas. Puede usarse una lista de grupos o un string con un grupo
+```
+uids_grupo = NX.get_alarms_uids_by_groups([groups])
+```
+
+#### Cambiar el estado de la alarma. Debe especificarse el uid de la alarma y el estado a cambiar ('ARE' o 'EXR')
+```
+NX.callPostAckAlarm(uid, estado)
+```
+
+#### Cambiar el mensaje de estado de la alarma
+```
+NX.callPostAlarmEvent(uid, msg)
+```
+
+### Email Alerts <a class="anchor" id="chapter3.3"></a>
+Desde la versión **0.5** se añade soporte para generar alarmas de correo eléctronico.
+
+Para usar la función debe crearse un objeto de tipo EmailAlerts. Deben proporcionarse los parámetros de conexión.
+
+Se recomienda usar variables de entorno para proteger las credenciales. En caso de no estar definidas se deben especificar (reemplazar las líneas de os.getenv()):
+
+```
+import os
+
+smtp_address = 'outlook.office365.com'
+smtp_port = 587
+
+# datos de la cuenta de envio
+sender_email_address = os.getenv("SENDER_EMAIL_ADDRESS")
+email_password = os.getenv("EMAIL_PASSWORD")
+receiver_email_address = os.getenv("RECEIVER_EMAIL_ADDRESS")
+
+email_alerts = EmailAlerts(smtp_address, smtp_port, sender_email_address, email_password, receiver_email_address)
+```
+
+Una vez creado el objeto email_alerts puede usarse con libertad, bien con los parámetros predeterminados o moficiando los componentes del mensaje
+
+El asunto y el cuerpo del mensaje tienen valores predeterminados en función del nombre del archivo, pero environment es una variable requerida con la que identificar el entorno de producción.
+```
+enviroment = 'NEXUS_PROD'
+subject = 'ALARMA'
+body = 'Alarma de ' + environment
+
+email_alerts.set_email_alert_info(subject, body, environment)
+```
+
+
+Se puede usar la alerta de correo en cualquier función, sea de la API o no. Si la ejecución falla, 
+se captura la excepción y se envía un correo con el error (mensaje predeterminado).
+
+Si se quiere incorporar a un script entero, debe usarse la función main()
+
+```
+# Uso del decorador para generar el correo
+
+@email_alerts.email_alert_decorator
+def main():
+    # Aquí va todo el código del programa...
+    raise Exception('Error en la función')
+    
+if __name__ == '__main__':
+    main() # Si aparece un error, se envía un correo con el error
+```
 
 ## Contribuir <a class="anchor" id="chapter4"></a>
 
@@ -85,7 +170,17 @@ Sugerencias:
 
 ## Change log <a class="anchor" id="chapter5"></a>
 
-v0.4.0 - 30/03/2022
+###v0.5.0 - 12/04/2022
+
+**Added**
+
+ - Email alerts functions
+
+**Changed**
+
+ - Documentation
+
+###v0.4.0 - 30/03/2022
 
 **Added**
   
