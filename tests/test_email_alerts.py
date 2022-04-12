@@ -28,7 +28,7 @@ class TestEmailAlerts(TestCase):
         self.e_alerts.send_email(self.subject, self.body)
         self.assertTrue(True)
 
-    def test_email_alert_wrapper(self):
+    def test_email_alert_decorator(self):
         e_alerts = EmailAlerts(self.smtp_address, self.smtp_port, self.sender_email_address, self.email_password,
                                self.receiver_email_address)
 
@@ -36,7 +36,7 @@ class TestEmailAlerts(TestCase):
         e_alerts.set_email_alert_info(self.subject, self.body, environment='test')
 
         # If you want to test the email alert wrapper, you can uncomment the following lines
-        @e_alerts.email_alert_wrapper
+        @e_alerts.email_alert_decorator
         def mock_function():
             raise Exception('Test exception')
 

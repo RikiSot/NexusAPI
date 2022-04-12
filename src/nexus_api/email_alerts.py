@@ -54,7 +54,7 @@ class EmailAlerts:
         self.set_subject(None)
         self.set_environment(None)
 
-    def email_alert_wrapper(self, fnc):
+    def email_alert_decorator(self, fnc):
         """
         Wrapper function for email alerts. The contents of the email can be set by the user
         using the set_message set_subject functions, and set_environment function.
